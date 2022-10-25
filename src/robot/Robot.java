@@ -4,17 +4,30 @@
  */
 package robot;
 
+import robot.control.Control;
+import robot.vista.Vista;
+
 /**
  *
  * @author bertu
  */
 public class Robot {
+    
+    private Control control;
+    private Vista vista;
+    
+    public Robot(){
+        this.control = new Control();
+        this.vista = new Vista("Robot con pasillos estrechos", control);
+
+        this.vista.mostrar();
+    }
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        Robot robot = new Robot();
     }
     
 }
