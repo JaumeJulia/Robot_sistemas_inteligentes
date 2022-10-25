@@ -9,6 +9,26 @@ package robot.modelo;
  *
  * @author Daxmaster
  */
-public class Direcciones {
+public enum Direcciones {
+    NORTE(0, -1, "amogusNorte"),
+    SUR(0, 1, "amogusSur"),
+    ESTE(1, 0, "amogusEste"),
+    OESTE(-1, 0, "amogusOeste");
     
+    public final int X;
+    public final int Y;
+    public final String LINKFOTO;
+    
+    private Direcciones(int x, int y, String linkFoto){
+        X = x;
+        Y = y;
+        LINKFOTO = linkFoto;
+    }
+    
+    public int[] getMotionValues(){
+        int[] motionValues = new int[2];
+        motionValues[0] = X;
+        motionValues[1] = Y;
+        return motionValues;        
+    }
 }
