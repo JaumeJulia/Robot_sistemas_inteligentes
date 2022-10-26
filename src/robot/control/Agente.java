@@ -65,7 +65,7 @@ public class Agente {
     }
     
     public void avanzar(int[] siguienteCasilla){
-        vista.moverAgente(siguienteCasilla, direcciones[direccionActual]);
+        //vista.moverAgente(siguienteCasilla, direcciones[direccionActual]);
     }
     
     public void rotar(int sentido){
