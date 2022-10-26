@@ -19,6 +19,7 @@ public class Robot {
     public Robot(){
         this.control = new Control();
         this.vista = new Vista("Robot con pasillos estrechos", control);
+        control.setVista(vista);
 
         this.vista.mostrar();
     }

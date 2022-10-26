@@ -21,6 +21,7 @@ import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import robot.control.Agente;
 import robot.control.Control;
 
 /**
@@ -44,7 +45,7 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
 
     private JButton posicionarAgente;
     private boolean agente = false;
-    private final int posicionAgente[] = new int[2];
+    private int posicionAgente[] = new int[2];
     private final JLabel tamañoRecintoLabel = new JLabel("Tamaño del recinto: ");
     private JTextField tamañoRecintoText = new JTextField();
     private final JSlider sliderTamañoRecinto = new JSlider(JSlider.HORIZONTAL, 5, 20, 10);
@@ -179,6 +180,14 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
         repaint();
 
     }
+    
+    public void moverAgente(int[] posicion){
+        matrizCuadros[posicionAgente[0]][posicionAgente[1]].setAgente(false);
+        matrizCuadros[posicion[0]][posicion[1]].setAgente(true);
+        posicionAgente[0] = posicion[0];
+        posicionAgente[1] = posicion[1];
+        repaint();
+    }
 
     //PINTAMOS LA MATRIZ
     @Override
@@ -284,6 +293,8 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
                 matrizCuadros[j][i].setAgente(true);
                 posicionAgente[0] = j;
                 posicionAgente[1] = i;
+                Agente robot = new Agente(posicionAgente, 1);
+                control.setAgente(robot);
                 agente = false;
             } else if (agente == false && matrizCuadros[j][i].isAgente() == false) {
                 if (matrizCuadros[j][i].isPared() == false) {

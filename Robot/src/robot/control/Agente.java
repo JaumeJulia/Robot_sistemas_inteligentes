@@ -29,7 +29,7 @@ public class Agente {
         this.posicionActual = posicionActual;
     }
     
-    public void moverAgente(){
+    public int[] moverAgente(){
         //logica del agente para decidir hacia donde moverse
         rotar(-rotacion);
         int[] siguienteCasilla = {direcciones[direccionActual].X + posicionActual[0],
@@ -61,12 +61,14 @@ public class Agente {
                 }
             }
         }
-        avanzar(siguienteCasilla);
+        posicionActual = siguienteCasilla;
+        return siguienteCasilla;
+        //avanzar(siguienteCasilla);
     }
     
-    public void avanzar(int[] siguienteCasilla){
+    //public void avanzar(int[] siguienteCasilla){
         //vista.moverAgente(siguienteCasilla, direcciones[direccionActual]);
-    }
+    //}
     
     public void rotar(int sentido){
         direccionActual = (direccionActual + sentido) % 4;        
