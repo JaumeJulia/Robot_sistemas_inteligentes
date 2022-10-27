@@ -40,7 +40,7 @@ import robot.modelo.Direcciones;
  */
 public class Vista extends JFrame implements ChangeListener, ComponentListener, MouseListener, ActionListener {
 
-    private Control control;
+    Control control;
 
     private Graphics g;
     private String directorioImagen;
@@ -57,8 +57,8 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
 
     private JButton posicionarAgente;
     private JToggleButton iniciar;
-    private boolean agente = false;
-    private int posicionAgente[] = new int[2];
+    boolean agente = false;
+    int posicionAgente[] = new int[2];
     private final JLabel tamañoRecintoLabel = new JLabel("Tamaño del recinto: ");
     private JTextField tamañoRecintoText = new JTextField();
     final JSlider sliderTamañoRecinto = new JSlider(JSlider.HORIZONTAL, 5, 20, 10);
