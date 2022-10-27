@@ -26,6 +26,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import robot.control.Agente;
 import robot.control.Control;
+import robot.modelo.Direcciones;
 
 /**
  *
@@ -214,11 +215,19 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
 
     }
 
-    public void moverAgente(int[] posicion) {
+//    public void moverAgente(int[] posicion) {
+//        matrizCuadros[posicionAgente[0]][posicionAgente[1]].setAgente(false);
+//        matrizCuadros[posicion[0]][posicion[1]].setAgente(true);
+//        posicionAgente[0] = posicion[0];
+//        posicionAgente[1] = posicion[1];
+//        repaint();
+//    }
+    
+    public void moverAgente(Direcciones direccion){
         matrizCuadros[posicionAgente[0]][posicionAgente[1]].setAgente(false);
-        matrizCuadros[posicion[0]][posicion[1]].setAgente(true);
-        posicionAgente[0] = posicion[0];
-        posicionAgente[1] = posicion[1];
+        posicionAgente[0] += direccion.X;
+        posicionAgente[1] += direccion.Y;
+        matrizCuadros[posicionAgente[0]][posicionAgente[1]].setAgente(true);
         repaint();
     }
 
