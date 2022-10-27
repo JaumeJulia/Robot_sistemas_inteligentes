@@ -68,21 +68,10 @@ public class Agente {
         System.out.println("Me dirijo al:" + direcciones[direccionActual].toString());
         posicionActual = siguienteCasilla;
         return direcciones[direccionActual];
-        //return siguienteCasilla;
-        //avanzar(siguienteCasilla);
     }
     
-    //public void avanzar(int[] siguienteCasilla){
-        //vista.moverAgente(siguienteCasilla, direcciones[direccionActual]);
-    //}
-    
     public void rotar(int sentido){
-        System.out.println("Valor de direccionActual: " + direccionActual);
-        int pene = direccionActual + sentido;
-        System.out.println("suma de direccionActual + sentido: " + pene );
-        //direccionActual = (direccionActual + sentido) % 4;
         direccionActual = Math.floorMod((direccionActual + sentido), 4);
-        System.out.println("Valor de direccionActual DESPUES: " + direccionActual);
     }
     
 }
