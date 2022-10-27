@@ -10,10 +10,10 @@ package robot.modelo;
  * @author Daxmaster
  */
 public enum Direcciones {
-    NORTE(0, -1, "amogusNorte"),
-    SUR(0, 1, "amogusSur"),
-    ESTE(1, 0, "amogusEste"),
-    OESTE(-1, 0, "amogusOeste");
+    NORTE(0, -1, "amogus_NORTE.png"),
+    SUR(0, 1, "amogus_SUR.png"),
+    ESTE(1, 0, "amogus_ESTE.png"),
+    OESTE(-1, 0, "amogus_OESTE.png");
     
     public final int X;
     public final int Y;

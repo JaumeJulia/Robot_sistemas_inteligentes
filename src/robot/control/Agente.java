@@ -30,7 +30,7 @@ public class Agente {
         this.vista = vista;
     }
     
-    public int[] moverAgente(){
+    public Direcciones moverAgente(){
         //logica del agente para decidir hacia donde moverse
         rotar(-rotacion);
         int[] siguienteCasilla = {direcciones[direccionActual].X + posicionActual[0],
@@ -67,7 +67,8 @@ public class Agente {
         }
         System.out.println("Me dirijo al:" + direcciones[direccionActual].toString());
         posicionActual = siguienteCasilla;
-        return siguienteCasilla;
+        return direcciones[direccionActual];
+        //return siguienteCasilla;
         //avanzar(siguienteCasilla);
     }
     
