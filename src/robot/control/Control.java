@@ -28,6 +28,7 @@ public class Control {
     
     public void setSimulacion(boolean simulacion){
         this.simulacion = simulacion;
+        System.out.println("Simulacion: "+ simulacion);
     }
     
     public void inicio(){
