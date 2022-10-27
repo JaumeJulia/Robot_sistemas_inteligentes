@@ -10,6 +10,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.BoxLayout;
@@ -19,6 +21,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
+import javax.swing.JToggleButton;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import robot.control.Agente;
@@ -44,6 +47,7 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
     private final JPanel opciones = new JPanel();
 
     private JButton posicionarAgente;
+    private JToggleButton iniciar;
     private boolean agente = false;
     private int posicionAgente[] = new int[2];
     private final JLabel tamañoRecintoLabel = new JLabel("Tamaño del recinto: ");
@@ -80,6 +84,19 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
         
         posicionarAgente = new JButton("Agente");
         posicionarAgente.addActionListener(this);
+        iniciar = new JToggleButton("Iniciar");
+        iniciar.addItemListener(new ItemListener() {
+
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+               int estado = e.getStateChange();
+                if(estado == ItemEvent.SELECTED){
+                    control.setSimulacion(true);
+                } else {
+                    control.setSimulacion(false);
+                }
+            }
+        });
         tamañoRecintoText = new JTextField("5");
         tamañoRecintoText.setEditable(false);
         tamañoRecintoText.setText(String.valueOf(sliderTamañoRecinto.getValue()));
@@ -95,12 +112,12 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
         c.gridx = 0;
         c.gridy = 1;
         opciones.add(textos, c);
-        c.gridx = 0;
         c.gridy = 2;
         opciones.add(sliderTamañoRecinto, c);
-        c.gridx = 0;
         c.gridy = 3;
         opciones.add(posicionarAgente, c);
+        c.gridy = 4;
+        opciones.add(iniciar, c);
         opciones.setMaximumSize(new Dimension((int) (ancho * 0.25), alto));
 
         recinto.setMaximumSize(new Dimension((int) (ancho * 0.75), alto));
