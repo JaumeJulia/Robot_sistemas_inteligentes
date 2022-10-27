@@ -14,6 +14,12 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.lang.System.Logger;
+import java.util.logging.Level;
+import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -37,6 +43,8 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
     private Control control;
 
     private Graphics g;
+    private String directorioImagen;
+    BufferedImage imagen;
 
     public Cuadro[][] matrizCuadros;
     private int minX, maxX, minY, maxY;
@@ -54,6 +62,9 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
     private final JLabel tamañoRecintoLabel = new JLabel("Tamaño del recinto: ");
     private JTextField tamañoRecintoText = new JTextField();
     private final JSlider sliderTamañoRecinto = new JSlider(JSlider.HORIZONTAL, 5, 20, 10);
+    private final JLabel velocidadLabel = new JLabel("Velocidad: ");
+    private JTextField velocidadText = new JTextField();
+    private final JSlider sliderVelocidad = new JSlider(JSlider.HORIZONTAL, 1, 10, 3);
 
     //CONSTRUCTOR DE VISTA
     public Vista(String nombre, Control control) {
@@ -105,21 +116,35 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
         tamañoRecintoText.setText(String.valueOf(sliderTamañoRecinto.getValue()));
         sliderTamañoRecinto.addChangeListener(this);
 
-        JPanel textos = new JPanel();
-        textos.setLayout(new FlowLayout());
-        textos.add(tamañoRecintoLabel);
-        textos.add(tamañoRecintoText);
+        velocidadText = new JTextField("3");
+        velocidadText.setEditable(false);
+        velocidadText.setText(String.valueOf(sliderVelocidad.getValue()));
+        sliderVelocidad.addChangeListener(this);
+
+        JPanel tamaño = new JPanel();
+        tamaño.setLayout(new FlowLayout());
+        tamaño.add(tamañoRecintoLabel);
+        tamaño.add(tamañoRecintoText);
+
+        JPanel velocidad = new JPanel();
+        velocidad.setLayout(new FlowLayout());
+        velocidad.add(velocidadLabel);
+        velocidad.add(velocidadText);
 
         c.gridwidth = 1;
         c.weighty = .2;
         c.gridx = 0;
         c.gridy = 1;
-        opciones.add(textos, c);
+        opciones.add(tamaño, c);
         c.gridy = 2;
         opciones.add(sliderTamañoRecinto, c);
         c.gridy = 3;
-        opciones.add(posicionarAgente, c);
+        opciones.add(velocidad, c);
         c.gridy = 4;
+        opciones.add(sliderVelocidad, c);
+        c.gridy = 5;
+        opciones.add(posicionarAgente, c);
+        c.gridy = 6;
         opciones.add(iniciar, c);
         opciones.setMaximumSize(new Dimension((int) (ancho * 0.25), alto));
 
@@ -222,8 +247,13 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
 //        posicionAgente[1] = posicion[1];
 //        repaint();
 //    }
-    
-    public void moverAgente(Direcciones direccion){
+    public void moverAgente(Direcciones direccion) {
+        directorioImagen = direccion.LINKFOTO;
+        try {
+            imagen = ImageIO.read(new File(directorioImagen));
+        } catch (IOException ex) {
+            System.out.println("Error de imagen");
+        }
         matrizCuadros[posicionAgente[0]][posicionAgente[1]].setAgente(false);
         posicionAgente[0] += direccion.X;
         posicionAgente[1] += direccion.Y;
@@ -235,8 +265,6 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
     @Override
     public void paint(Graphics g) {
         super.paintComponents(g);
-        g.setColor(Color.WHITE);
-        g.fillRect(0, 0, (int) (ancho * 0.75) - 30, alto);
         g.setColor(Color.BLACK);
         for (int i = 0; i < sliderTamañoRecinto.getValue() + 2; i++) {
             for (int j = 0; j < sliderTamañoRecinto.getValue() + 2; j++) {
@@ -247,12 +275,15 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
                     g.fillRect(x, y, w, h);
                 }
                 if (matrizCuadros[i][j].isAgente()) {
-                    g.setColor(Color.BLUE);
-                    g.fillRect(x, y, w, h);
-                    g.setColor(Color.BLACK);
-                    //g.drawImage(img, x, y, w, h, this);
+
+                    g.drawImage(imagen, x, y, w, h, this);
                 }
             }
+        }
+        try {
+            Thread.sleep(1000/sliderVelocidad.getValue());
+        } catch (InterruptedException ex) {
+            java.util.logging.Logger.getLogger(Vista.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -260,8 +291,11 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
     @Override
     public void stateChanged(ChangeEvent e) {
         JSlider src = (JSlider) e.getSource();
-        if (!src.getValueIsAdjusting()) {
+        if (!src.getValueIsAdjusting() && e.getSource() == sliderTamañoRecinto) {
             tamañoRecintoText.setText(String.valueOf(src.getValue()));
+            reinit();
+        } else if (!src.getValueIsAdjusting() && e.getSource() == sliderVelocidad) {
+            velocidadText.setText(String.valueOf(src.getValue()));
             reinit();
         }
 
@@ -337,6 +371,11 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
                 posicionAgente[1] = i;
                 Agente robot = new Agente(posicionAgente, 1, this);
                 control.setAgente(robot);
+                try {
+                    imagen = ImageIO.read(new File("src/robot/modelo/amogus_OESTE.png"));
+                } catch (IOException ex) {
+                    System.out.println("Error de imagen");
+                }
                 agente = false;
             } else if (agente == false && matrizCuadros[j][i].isAgente() == false) {
                 if (matrizCuadros[j][i].isPared() == false) {
