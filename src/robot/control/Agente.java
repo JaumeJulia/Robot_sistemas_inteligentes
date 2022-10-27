@@ -57,6 +57,9 @@ public class Agente {
         //Esto dejaria de funcionar si justamente el robot se le encierra en un espacio de una casilla, donde tiene paredes en las cuatro direcciones.
         //Es una perrada que hagan eso, no vale la pena comprobar ese caso.
                     rotar(rotacion);
+                    if(atascado > 0){
+                        atascado -= 2;
+                    }
                     siguienteCasilla[0] = direcciones[direccionActual].X + posicionActual[0];
                     siguienteCasilla[1] = direcciones[direccionActual].Y + posicionActual[1];
                 }
