@@ -36,7 +36,7 @@ public class Agente {
         int[] siguienteCasilla = {direcciones[direccionActual].X + posicionActual[0],
             direcciones[direccionActual].Y + posicionActual[1]}; //aqui espera encontrar pared
         //AQUI QUIERE GIRAR HACIA DONDE ESPERA ENCONTRAR LA PARED QUE SIGUE
-        if(!vista.getCasilla(siguienteCasilla).isPared() && atascado < 3){
+        if(!vista.getCasilla(siguienteCasilla).isPared() && atascado < 5){
             atascado += 1;
         } else {
         //AQUI INTENTA SEGUIR RECTO PORQUE PUEDE SEGUIR LA PARED DEL SUPUESTO PERIMETRO
