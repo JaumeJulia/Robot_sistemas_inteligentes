@@ -24,3 +24,8 @@ build/classes/robot/control/Control.class
 build/classes/robot/control/Agente.class
 build/built-jar.properties
 build/built-jar.properties
+
+
+*.class
+*.rar
+*/private/
