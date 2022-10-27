@@ -140,19 +140,22 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
         this.addMouseListener(this);
 
         //CALCULAMOS LO QUE OCUPA LA CUADRICULA Y LO QUE OCUPA CADA CUADRO
-        double aux = (ancho * 0.75);
-        if ((aux / alto) > 1) {
-            minX = (int) (((aux - alto) / 2) + 30);
-            minY = 50;
-            maxX = (int) (aux - (((aux - alto) / 2) + 30));
-            maxY = alto - 30;
+        double auxAncho = recinto.getWidth(), auxAlto = recinto.getHeight();
+        int tamañoBase;
+        if ((auxAncho / auxAlto) >= 1) {
+            minX = (int) (((auxAncho - auxAlto) / 2) + 10);
+            minY = 10;
+            maxX = (int) (auxAncho - (((auxAncho - auxAlto) / 2)  - 50));
+            maxY = alto - 50;
+            tamañoBase = (maxY - minY) / (sliderTamañoRecinto.getValue() + 2);
         } else {
-            minX = 30;
-            minY = (int) (((alto - aux) / 2) + 30);
-            maxX = (int) (aux - 30);
-            maxY = (int) (alto - (((alto - aux) / 2) + 30));
+            minX = 10;
+            minY = (int) (((auxAlto - auxAncho) / 2) + 10);
+            maxX = (int) (auxAncho - 50);
+            maxY = (int) (auxAlto - (((auxAlto - auxAncho) / 2) - 50));
+            tamañoBase = (maxX - minX) / (sliderTamañoRecinto.getValue() + 2);
         }
-        int tamañoBase = (maxY - minY) / (sliderTamañoRecinto.getValue() + 2), posX = minX, posY = minY;
+        int posX = minX, posY = minY;
 
         //INICIALIZAMOS LA MATRIZ DE CUADROS CON EL TAMAÑO INDICADO EN EL SLIDER
         matrizCuadros = new Cuadro[sliderTamañoRecinto.getValue() + 2][sliderTamañoRecinto.getValue() + 2];
@@ -180,19 +183,22 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
         recinto.setMaximumSize(new Dimension((int) (ancho * 0.75), alto));
         this.add(recinto);
         this.add(opciones);
-        double aux = (ancho * 0.75);
-        if ((aux / alto) > 1) {
-            minX = (int) (((aux - alto) / 2) + 30);
-            minY = 50;
-            maxX = (int) (aux - (((aux - alto) / 2) + 30));
-            maxY = alto - 30;
+        double auxAncho = recinto.getWidth(), auxAlto = recinto.getHeight();
+        int tamañoBase;
+        if ((auxAncho / auxAlto) >= 1) {
+            minX = (int) (((auxAncho - auxAlto) / 2) + 10);
+            minY = 10;
+            maxX = (int) (auxAncho - (((auxAncho - auxAlto) / 2)  - 50));
+            maxY = alto - 50;
+            tamañoBase = (maxY - minY) / (sliderTamañoRecinto.getValue() + 2);
         } else {
-            minX = 30;
-            minY = (int) (((alto - aux) / 2) + 30);
-            maxX = (int) (aux - 30);
-            maxY = (int) (alto - (((alto - aux) / 2) + 30));
+            minX = 10;
+            minY = (int) (((auxAlto - auxAncho) / 2) + 10);
+            maxX = (int) (auxAncho - 50);
+            maxY = (int) (auxAlto - (((auxAlto - auxAncho) / 2) - 50));
+            tamañoBase = (maxX - minX) / (sliderTamañoRecinto.getValue() + 2);
         }
-        int tamañoBase = (maxY - minY) / (sliderTamañoRecinto.getValue() + 2), posX = minX, posY = minY;
+        int posX = minX, posY = minY;
 
         Cuadro auxMatrizCuadros[][] = matrizCuadros;
         matrizCuadros = new Cuadro[sliderTamañoRecinto.getValue() + 2][sliderTamañoRecinto.getValue() + 2];
@@ -214,6 +220,7 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
                 if ((i == 0) || (j == 0) || (i == (sliderTamañoRecinto.getValue() + 1)) || (j == (sliderTamañoRecinto.getValue() + 1))) {
                     matrizCuadros[i][j].setCentinela(true);
                     matrizCuadros[i][j].setPared(true);
+                    matrizCuadros[i][j].setAgente(false);
                 }
                 posY += tamañoBase;
             }
