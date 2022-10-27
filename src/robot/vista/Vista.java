@@ -52,7 +52,7 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
     private int ancho = 800;
     private int alto = 500;
 
-    private final JPanel recinto = new JPanel();
+    private final Recinto recinto;
     private final JPanel opciones = new JPanel();
 
     private JButton posicionarAgente;
@@ -61,16 +61,14 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
     private int posicionAgente[] = new int[2];
     private final JLabel tamañoRecintoLabel = new JLabel("Tamaño del recinto: ");
     private JTextField tamañoRecintoText = new JTextField();
-    private final JSlider sliderTamañoRecinto = new JSlider(JSlider.HORIZONTAL, 5, 20, 10);
-    private final JLabel velocidadLabel = new JLabel("Velocidad: ");
-    private JTextField velocidadText = new JTextField();
-    private final JSlider sliderVelocidad = new JSlider(JSlider.HORIZONTAL, 1, 10, 3);
+    final JSlider sliderTamañoRecinto = new JSlider(JSlider.HORIZONTAL, 5, 20, 10);
 
     //CONSTRUCTOR DE VISTA
     public Vista(String nombre, Control control) {
 
         super(nombre);
         this.control = control;
+        recinto = new Recinto(this);
         initComponents();
 
     }
@@ -116,20 +114,10 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
         tamañoRecintoText.setText(String.valueOf(sliderTamañoRecinto.getValue()));
         sliderTamañoRecinto.addChangeListener(this);
 
-        velocidadText = new JTextField("3");
-        velocidadText.setEditable(false);
-        velocidadText.setText(String.valueOf(sliderVelocidad.getValue()));
-        sliderVelocidad.addChangeListener(this);
-
         JPanel tamaño = new JPanel();
         tamaño.setLayout(new FlowLayout());
         tamaño.add(tamañoRecintoLabel);
         tamaño.add(tamañoRecintoText);
-
-        JPanel velocidad = new JPanel();
-        velocidad.setLayout(new FlowLayout());
-        velocidad.add(velocidadLabel);
-        velocidad.add(velocidadText);
 
         c.gridwidth = 1;
         c.weighty = .2;
@@ -139,17 +127,13 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
         c.gridy = 2;
         opciones.add(sliderTamañoRecinto, c);
         c.gridy = 3;
-        opciones.add(velocidad, c);
-        c.gridy = 4;
-        opciones.add(sliderVelocidad, c);
-        c.gridy = 5;
         opciones.add(posicionarAgente, c);
-        c.gridy = 6;
+        c.gridy = 4;
         opciones.add(iniciar, c);
         opciones.setMaximumSize(new Dimension((int) (ancho * 0.25), alto));
 
         recinto.setMaximumSize(new Dimension((int) (ancho * 0.75), alto));
-
+        
         this.add(recinto);
         this.add(opciones);
         this.addComponentListener(this);
@@ -261,41 +245,12 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
         repaint();
     }
 
-    //PINTAMOS LA MATRIZ
-    @Override
-    public void paint(Graphics g) {
-        super.paintComponents(g);
-        g.setColor(Color.BLACK);
-        for (int i = 0; i < sliderTamañoRecinto.getValue() + 2; i++) {
-            for (int j = 0; j < sliderTamañoRecinto.getValue() + 2; j++) {
-                int x = matrizCuadros[i][j].getX(), y = matrizCuadros[i][j].getY(),
-                        w = matrizCuadros[i][j].getWidth(), h = matrizCuadros[i][j].getHeight();
-                g.drawRect(x, y, w, h);
-                if (matrizCuadros[i][j].isPared()) {
-                    g.fillRect(x, y, w, h);
-                }
-                if (matrizCuadros[i][j].isAgente()) {
-
-                    g.drawImage(imagen, x, y, w, h, this);
-                }
-            }
-        }
-        try {
-            Thread.sleep(1000/sliderVelocidad.getValue());
-        } catch (InterruptedException ex) {
-            java.util.logging.Logger.getLogger(Vista.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
     //LISTENER PARA EL SLIDER
     @Override
     public void stateChanged(ChangeEvent e) {
         JSlider src = (JSlider) e.getSource();
         if (!src.getValueIsAdjusting() && e.getSource() == sliderTamañoRecinto) {
             tamañoRecintoText.setText(String.valueOf(src.getValue()));
-            reinit();
-        } else if (!src.getValueIsAdjusting() && e.getSource() == sliderVelocidad) {
-            velocidadText.setText(String.valueOf(src.getValue()));
             reinit();
         }
 
