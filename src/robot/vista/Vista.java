@@ -81,7 +81,7 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
 
         opciones.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
-        
+
         posicionarAgente = new JButton("Agente");
         posicionarAgente.addActionListener(this);
         iniciar = new JToggleButton("Iniciar");
@@ -89,8 +89,8 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
 
             @Override
             public void itemStateChanged(ItemEvent e) {
-               int estado = e.getStateChange();
-                if(estado == ItemEvent.SELECTED){
+                int estado = e.getStateChange();
+                if (estado == ItemEvent.SELECTED) {
                     Thread thread = new Thread(control);
                     control.setSimulacion(true);
                     thread.start();
@@ -142,13 +142,18 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
             maxX = (int) (aux - 30);
             maxY = (int) (alto - (((alto - aux) / 2) + 30));
         }
-        int tamañoBase = (maxY - minY) / sliderTamañoRecinto.getValue(), posX = minX, posY = minY;
+        int tamañoBase = (maxY - minY) / (sliderTamañoRecinto.getValue() + 2), posX = minX, posY = minY;
 
         //INICIALIZAMOS LA MATRIZ DE CUADROS CON EL TAMAÑO INDICADO EN EL SLIDER
-        matrizCuadros = new Cuadro[sliderTamañoRecinto.getValue()][sliderTamañoRecinto.getValue()];
-        for (int i = 0; i < sliderTamañoRecinto.getValue(); i++) {
-            for (int j = 0; j < sliderTamañoRecinto.getValue(); j++) {
-                matrizCuadros[i][j] = new Cuadro(posX, posY, tamañoBase, tamañoBase, false, false);
+        matrizCuadros = new Cuadro[sliderTamañoRecinto.getValue() + 2][sliderTamañoRecinto.getValue() + 2];
+        for (int i = 0; i < sliderTamañoRecinto.getValue() + 2; i++) {
+            for (int j = 0; j < sliderTamañoRecinto.getValue() + 2; j++) {
+                if ((i == 0) || (j == 0) || (i == (sliderTamañoRecinto.getValue() + 1)) || (j == (sliderTamañoRecinto.getValue() + 1))) {
+                    matrizCuadros[i][j] = new Cuadro(posX, posY, tamañoBase, tamañoBase, true, false, true);
+                } else {
+                    matrizCuadros[i][j] = new Cuadro(posX, posY, tamañoBase, tamañoBase, false, false, false);
+                }
+
                 posY += tamañoBase;
             }
             posX += tamañoBase;
@@ -177,19 +182,28 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
             maxX = (int) (aux - 30);
             maxY = (int) (alto - (((alto - aux) / 2) + 30));
         }
-        int tamañoBase = (maxY - minY) / sliderTamañoRecinto.getValue(), posX = minX, posY = minY;
+        int tamañoBase = (maxY - minY) / (sliderTamañoRecinto.getValue() + 2), posX = minX, posY = minY;
 
         Cuadro auxMatrizCuadros[][] = matrizCuadros;
-        matrizCuadros = new Cuadro[sliderTamañoRecinto.getValue()][sliderTamañoRecinto.getValue()];
+        matrizCuadros = new Cuadro[sliderTamañoRecinto.getValue() + 2][sliderTamañoRecinto.getValue() + 2];
         //CREAMOS UNA NUEVA MATRIZ DEL TAMAÑO INDICADO POR EL SLIDER Y COPIAMOS
         //EL CONTENIDO DE LA MATRIZ ANTERIOR
-        for (int i = 0; i < sliderTamañoRecinto.getValue(); i++) {
-            for (int j = 0; j < sliderTamañoRecinto.getValue(); j++) {
+        for (int i = 0; i < sliderTamañoRecinto.getValue() + 2; i++) {
+            for (int j = 0; j < sliderTamañoRecinto.getValue() + 2; j++) {
                 if (auxMatrizCuadros[0].length > i && auxMatrizCuadros[0].length > j) {
-                    matrizCuadros[i][j] = new Cuadro(posX, posY, tamañoBase, tamañoBase,
-                            auxMatrizCuadros[i][j].isPared(), auxMatrizCuadros[i][j].isAgente());
+                    if (auxMatrizCuadros[i][j].isCentinela() == true) {
+                        matrizCuadros[i][j] = new Cuadro(posX, posY, tamañoBase, tamañoBase,
+                                false, auxMatrizCuadros[i][j].isAgente(), false);
+                    } else {
+                        matrizCuadros[i][j] = new Cuadro(posX, posY, tamañoBase, tamañoBase,
+                                auxMatrizCuadros[i][j].isPared(), auxMatrizCuadros[i][j].isAgente(), false);
+                    }
                 } else {
-                    matrizCuadros[i][j] = new Cuadro(posX, posY, tamañoBase, tamañoBase, false, false);
+                    matrizCuadros[i][j] = new Cuadro(posX, posY, tamañoBase, tamañoBase, false, false, false);
+                }
+                if ((i == 0) || (j == 0) || (i == (sliderTamañoRecinto.getValue() + 1)) || (j == (sliderTamañoRecinto.getValue() + 1))) {
+                    matrizCuadros[i][j].setCentinela(true);
+                    matrizCuadros[i][j].setPared(true);
                 }
                 posY += tamañoBase;
             }
@@ -199,8 +213,8 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
         repaint();
 
     }
-    
-    public void moverAgente(int[] posicion){
+
+    public void moverAgente(int[] posicion) {
         matrizCuadros[posicionAgente[0]][posicionAgente[1]].setAgente(false);
         matrizCuadros[posicion[0]][posicion[1]].setAgente(true);
         posicionAgente[0] = posicion[0];
@@ -215,8 +229,8 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
         g.setColor(Color.WHITE);
         g.fillRect(0, 0, (int) (ancho * 0.75) - 30, alto);
         g.setColor(Color.BLACK);
-        for (int i = 0; i < sliderTamañoRecinto.getValue(); i++) {
-            for (int j = 0; j < sliderTamañoRecinto.getValue(); j++) {
+        for (int i = 0; i < sliderTamañoRecinto.getValue() + 2; i++) {
+            for (int j = 0; j < sliderTamañoRecinto.getValue() + 2; j++) {
                 int x = matrizCuadros[i][j].getX(), y = matrizCuadros[i][j].getY(),
                         w = matrizCuadros[i][j].getWidth(), h = matrizCuadros[i][j].getHeight();
                 g.drawRect(x, y, w, h);
@@ -318,7 +332,7 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
             } else if (agente == false && matrizCuadros[j][i].isAgente() == false) {
                 if (matrizCuadros[j][i].isPared() == false) {
                     matrizCuadros[j][i].setPared(true);
-                } else {
+                } else if (matrizCuadros[j][i].isCentinela() == false) {
                     matrizCuadros[j][i].setPared(false);
                 }
             }

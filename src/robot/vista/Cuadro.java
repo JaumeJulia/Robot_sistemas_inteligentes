@@ -13,12 +13,13 @@ import java.awt.Rectangle;
 public class Cuadro {
 
     Rectangle rectangulo;
-    private boolean pared, agente;
+    private boolean pared, agente, centinela;
 
-    public Cuadro(int x, int y, int w, int h, boolean p, boolean a) {
+    public Cuadro(int x, int y, int w, int h, boolean p, boolean a, boolean c) {
         this.rectangulo = new Rectangle(x, y, w, h);
         this.pared = p;
         this.agente = a;
+        this.centinela = c;
     }
 
     public void setPared(boolean p) {
@@ -27,6 +28,10 @@ public class Cuadro {
     
     public void setAgente(boolean a) {
         this.agente = a;
+    }
+    
+    public void setCentinela(boolean c) {
+        this.centinela = c;
     }
 
     public void setWidth(int w) {
@@ -43,6 +48,10 @@ public class Cuadro {
     
     public boolean isAgente() {
         return this.agente;
+    }
+    
+    public boolean isCentinela() {
+        return this.centinela;
     }
 
     public int getX() {
