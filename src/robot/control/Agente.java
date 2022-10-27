@@ -22,11 +22,12 @@ public class Agente {
     int[] posicionActual;
     int atascado = 0;
     
-    public Agente(int[] posicionActual, int rotacion){
+    public Agente(int[] posicionActual, int rotacion, Vista vista){
         Random ran = new Random();
         direccionActual = ran.nextInt(20) % 4;
         this.rotacion = rotacion;
         this.posicionActual = posicionActual;
+        this.vista = vista;
     }
     
     public int[] moverAgente(){
@@ -61,6 +62,7 @@ public class Agente {
                 }
             }
         }
+        System.out.println("Me dirijo al:" + direcciones[direccionActual].toString());
         posicionActual = siguienteCasilla;
         return siguienteCasilla;
         //avanzar(siguienteCasilla);
@@ -71,7 +73,12 @@ public class Agente {
     //}
     
     public void rotar(int sentido){
-        direccionActual = (direccionActual + sentido) % 4;        
+        System.out.println("Valor de direccionActual: " + direccionActual);
+        int pene = direccionActual + sentido;
+        System.out.println("suma de direccionActual + sentido: " + pene );
+        //direccionActual = (direccionActual + sentido) % 4;
+        direccionActual = Math.floorMod((direccionActual + sentido), 4);
+        System.out.println("Valor de direccionActual DESPUES: " + direccionActual);
     }
     
 }

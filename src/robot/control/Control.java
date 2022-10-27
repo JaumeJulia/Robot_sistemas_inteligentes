@@ -13,7 +13,7 @@ import robot.vista.Vista;
  *
  * @author bertu
  */
-public class Control {
+public class Control implements Runnable {
     Vista vista;
     Agente agente;
     private boolean simulacion = false;
@@ -31,7 +31,19 @@ public class Control {
         System.out.println("Simulacion: "+ simulacion);
     }
     
-    public void inicio(){
+//    public void inicio(){
+//        while(simulacion){        
+//            vista.moverAgente(agente.moverAgente());
+//            try {
+//                sleep(100);
+//            } catch (InterruptedException ex) {
+//                Logger.getLogger(Control.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//        }
+//    }
+    
+    @Override
+    public void run() {
         while(simulacion){        
             vista.moverAgente(agente.moverAgente());
             try {

@@ -91,7 +91,9 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
             public void itemStateChanged(ItemEvent e) {
                int estado = e.getStateChange();
                 if(estado == ItemEvent.SELECTED){
+                    Thread thread = new Thread(control);
                     control.setSimulacion(true);
+                    thread.start();
                 } else {
                     control.setSimulacion(false);
                 }
@@ -310,7 +312,7 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
                 matrizCuadros[j][i].setAgente(true);
                 posicionAgente[0] = j;
                 posicionAgente[1] = i;
-                Agente robot = new Agente(posicionAgente, 1);
+                Agente robot = new Agente(posicionAgente, 1, this);
                 control.setAgente(robot);
                 agente = false;
             } else if (agente == false && matrizCuadros[j][i].isAgente() == false) {
