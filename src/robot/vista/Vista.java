@@ -1,6 +1,5 @@
 package robot.vista;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
@@ -17,8 +16,6 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.lang.System.Logger;
-import java.util.logging.Level;
 import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -49,8 +46,8 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
     public Cuadro[][] matrizCuadros;
     private int minX, maxX, minY, maxY;
 
-    private int ancho = 800;
-    private int alto = 500;
+    private int ancho = 1600;
+    private int alto = 1000;
 
     private final Recinto recinto;
     private final JPanel opciones = new JPanel();
