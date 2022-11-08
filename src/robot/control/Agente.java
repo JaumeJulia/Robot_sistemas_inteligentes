@@ -20,6 +20,7 @@ public class Agente {
     int direccionActual;
     int rotacion; // +1 cuando se rota en sentido horario, -1 cuando es antihorario
     int[] posicionActual;
+    boolean siguiendoPerimetro;
     //int atascado = 0;
     
     public Agente(int[] posicionActual, int rotacion, Vista vista){
@@ -28,23 +29,28 @@ public class Agente {
         this.rotacion = rotacion;
         this.posicionActual = posicionActual;
         this.vista = vista;
+        siguiendoPerimetro = false;
     }
     
     private boolean[] reconocerEntorno(){
+        System.out.println("Iba hacia el:" + direcciones[direccionActual].toString());
         boolean[] entorno = new boolean[4];
         rotar(-rotacion);
         for(int i = 0; i < 4 ; i++){
+            System.out.println("Miro al:" + direcciones[direccionActual].toString());
             int[] siguienteCasilla = {direcciones[direccionActual].X + posicionActual[0],
             direcciones[direccionActual].Y + posicionActual[1]};
             entorno[i] = vista.getCasilla(siguienteCasilla).isPared();
             rotar(rotacion);
         }
+        rotar(rotacion);
+        System.out.println("Salgo mirando al:" + direcciones[direccionActual].toString());
         return entorno;        
     }
     
     public Direcciones moverAgente(){
         boolean[] entorno = reconocerEntorno();
-        rotar(rotacion);
+        //rotar(rotacion);
         boolean hayPared = false;
         for(int i = 0; i < entorno.length ; i++){
             if(entorno[i]){
@@ -52,19 +58,33 @@ public class Agente {
                 break;
             }
         }
-        
-        if(hayPared){
-            if(!entorno[0]){
-                rotar(-rotacion);
-            } else if(entorno[1]){
+        System.out.println("Hay pared? " + hayPared);
+        if(hayPared || siguiendoPerimetro){
+            if(!entorno[0] && entorno[1]){ //si se topa de frente con una pared y a la izquierda no tiene nada, va a querer poner la pared de delante a su izquierda
+                System.out.println("Me estampo");
                 if(!entorno[2]){
-                    rotar(rotacion);
+                    System.out.println("giro a mi derecha???");
+                    rotar(rotacion); //Gira a su derecha
+                    System.out.println("Quiero ir al:" + direcciones[direccionActual].toString());
                 } else {
-                    rotar(rotacion);
+                    rotar(rotacion); //Recula
                     rotar(rotacion);
                 }
+            } else {
+                if(!entorno[0]){
+                    rotar(-rotacion); //Gira a su izquierda
+                } else if(entorno[1]){ //De no cumplirse, sigue recto
+                    if(!entorno[2]){ 
+                        rotar(rotacion); //Gira a la derecha
+                    } else {
+                        rotar(rotacion); //Recula
+                        rotar(rotacion);
+                    }
+                }
             }
+            siguiendoPerimetro = hayPared;
         }
+        System.out.println(siguiendoPerimetro);
         System.out.println("Me dirijo al:" + direcciones[direccionActual].toString());
         return direcciones[direccionActual];
         
