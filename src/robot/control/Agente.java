@@ -60,7 +60,7 @@ public class Agente {
         }
         System.out.println("Hay pared? " + hayPared);
         if(hayPared || siguiendoPerimetro){
-            if(!entorno[0] && entorno[1]){ //si se topa de frente con una pared y a la izquierda no tiene nada, va a querer poner la pared de delante a su izquierda
+            if(!entorno[0] && entorno[1] && !siguiendoPerimetro){ //si se topa de frente con una pared y a la izquierda no tiene nada, va a querer poner la pared de delante a su izquierda
                 System.out.println("Me estampo");
                 if(!entorno[2]){
                     System.out.println("giro a mi derecha???");
